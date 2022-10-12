@@ -32,14 +32,14 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2 # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: rabbitmq # set this to your Amazon ECR repository name
-  ECS_SERVICE: rabbit-svc # set this to your Amazon ECS service name
+  ECR_REPOSITORY: rabbitmq1 # set this to your Amazon ECR repository name
+  ECS_SERVICE: rabbit-svc1 # set this to your Amazon ECS service name
   ECS_CLUSTER: rabbit-cl # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION:
-    rabbit # set this to the path to your Amazon ECS task definition
+    rabbit-td # set this to the path to your Amazon ECS task definition
     # file, e.g. .aws/task-definition.json
   CONTAINER_NAME:
-    rabbit-container # set this to the name of the container in the
+    rabbit-cont # set this to the name of the container in the
     # containerDefinitions section of your task definition
 
 permissions:
