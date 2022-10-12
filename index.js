@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 require("./src/routes")(app);
 require("./src/routes/reuseCRUD")(app);
 
-const PORT = process.env.LOCAL_PORT || 13000;
+const PORT = 80;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
