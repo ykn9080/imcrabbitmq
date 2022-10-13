@@ -12,11 +12,13 @@ db.sequelize.sync({ force: false, alter: false });
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-
+app.get("/healthcheck", (req, res) => {
+  res.send("Hello World!");
+});
 require("./src/routes")(app);
 require("./src/routes/reuseCRUD")(app);
 
-const PORT = 80;
+const PORT = 8484;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

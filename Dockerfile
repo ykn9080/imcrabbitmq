@@ -1,8 +1,7 @@
-FROM node:10-alpine
+FROM node:16.15.1-alpine
 
 WORKDIR /
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm prune --production
-CMD npm start
+CMD [ "node", "index.js" ]
