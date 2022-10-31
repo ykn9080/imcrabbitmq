@@ -35,14 +35,17 @@
 // });
 const amqp = require("amqplib");
 const reqres = require("./requestResponse");
+const Producer = require("./producer");
+
 async function connect(msg) {
   const msgBuffer = Buffer.from(JSON.stringify(msg));
   try {
-    const connection = await amqp.connect("amqp://localhost:5672");
+    //const connection = await amqp.connect("amqp://localhost:5672");
+    const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
-    await channel.assertQueue("number");
-    await channel.sendToQueue("number", msgBuffer);
-    console.log("Sending message to number queue");
+    await channel.assertQueue("yknamfirst");
+    await channel.sendToQueue("yknamfirst", msgBuffer);
+    console.log("Sending message to yknamfirst queue");
     await channel.close();
     await connection.close();
   } catch (ex) {
@@ -50,9 +53,16 @@ async function connect(msg) {
   }
 }
 exports.sendTest = (req, res) => {
-  connect({ number: 10 });
+  console.log(req.body);
+  const rk = req.body.routingKey;
+  const msg = req.body.message;
+  const producer = new Producer().publishMessage(rk, msg);
+  //   req.body.routingKey,
+  //   req.body.message
+  // );
+  //connect({ myscore: 101 });
 };
-exports.simpleTest = (req, res) => {
-  let replacement = {};
-  reqres.commonQueryBody("simpletest()", replacement, res);
-};
+// exports.simpleTest = (req, res) => {
+//   let replacement = {};
+//   reqres.commonQueryBody("simpletest()", replacement, res);
+// };

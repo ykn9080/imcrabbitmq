@@ -1,6 +1,6 @@
 const amqp = require("amqplib");
-const config = require("../config");
 
+require("dotenv").config();
 //step 1 : Connect to the rabbitmq server
 //step 2 : Create a new channel on that connection
 //step 3 : Create the exchange
@@ -10,7 +10,7 @@ class Producer {
   channel;
 
   async createChannel() {
-    const connection = await amqp.connect(config.rabbitMQ.url);
+    const connection = await amqp.connect(process.env.RABBITMQ_URL);
     this.channel = await connection.createChannel();
   }
 
@@ -18,8 +18,8 @@ class Producer {
     if (!this.channel) {
       await this.createChannel();
     }
-
-    const exchangeName = config.rabbitMQ.exchangeName;
+    console.log(routingKey, message);
+    const exchangeName = process.env.RABBITMQ_EXCHANGENAME;
     await this.channel.assertExchange(exchangeName, "direct");
 
     const logDetails = {

@@ -1,0 +1,59 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: "rabbitmq"
+    restart: unless-stopped
+    ports:
+      - 5673
+      - 15673:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - rabbitmq_nodejs
+
+  producer:
+    build: ./src/Producer
+    container_name: "image_uploader_producer"
+    depends_on:
+      - rabbitmq
+    restart: unless-stopped
+    ports:
+      - "3000:3001"
+    environment:
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq"
+      SRC_DIR: "./original"
+      EXCHANGE: "upload"
+      PORT: 3001
+    volumes:
+      - ./app/original/:/Producer/original/
+    networks:
+      - rabbitmq_nodejs
+
+  consumer:
+    build: ./src/Consumer
+    container_name: "image_uploader_consumer"
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: "amqp://guest:guest@rabbitmq"
+      SRC_DIR: "./original"
+      DEST_DIR: "./thumbnail"
+      EXCHANGE: "upload"
+      BINDING_KEY: "image"
+      WIDTH: 400
+      HEIGHT: 300
+    volumes:
+      - ~/original/:/Consumer/original/
+      - ~/thumbnail/:/Consumer/thumbnail/
+    networks:
+      - rabbitmq_node
+
+networks:
+  rabbitmq_nodejs:

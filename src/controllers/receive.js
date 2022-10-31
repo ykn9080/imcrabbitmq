@@ -29,14 +29,15 @@
 //   });
 // });
 const amqp = require("amqplib");
+require("dotenv").config();
 async function connect() {
   try {
-    const connection = await amqp.connect("amqp://localhost:5672");
+    const connection = await amqp.connect(process.env.RABBITMQ_URL);
     const channel = await connection.createChannel();
-    await channel.assertQueue("number");
-    channel.consume("number", (message) => {
+    await channel.assertQueue("yknamfirst");
+    channel.consume("yknamfirst", (message) => {
       const input = JSON.parse(message.content.toString());
-      console.log(`Received number: ${input.number}`);
+      console.log(`Received yknamfirst: ${message.content.toString()}`);
       channel.ack(message);
     });
     console.log(`Waiting for messages...`);

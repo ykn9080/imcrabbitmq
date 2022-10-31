@@ -17,8 +17,8 @@ app.get("/healthcheck", (req, res) => {
 });
 require("./src/routes")(app);
 require("./src/routes/reuseCRUD")(app);
-
-const PORT = 80;
+require("./src/controllers/receive");
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

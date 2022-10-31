@@ -6,7 +6,7 @@ const send = require("../controllers/send");
 module.exports = (app) => {
   // app.use("/send", send);
   // app.use("/receive", receive);
-  app.use("/simpletest", send.simpleTest);
+  //app.use("/simpletest", send.simpleTest);
   app.use("/send", send.sendTest);
   //const models = require("../models");
   // app.use("/api/getQuery", query.getQuery);
